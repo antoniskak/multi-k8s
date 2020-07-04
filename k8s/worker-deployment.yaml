@@ -15,4 +15,8 @@ spec:
             containers:
                 - name: worker
                   image: akakafonis/multi-worker
-                  
+                  env:
+                    - name: REDIS_HOST
+                      value: redis-cluster-ip-service # name of the ClusterIP service it needs to connect to
+                    - name: REDIS_PORT
+                      value: '6379'

@@ -17,3 +17,23 @@ spec:
                   image: akakafonis/multi-server
                   ports:
                     - containerPort: 5000
+                  env:
+                    - name: REDIS_HOST
+                      value: redis-cluster-ip-service # name of the ClusterIP service that is managing access to the pod
+                    - name: REDIS_PORT
+                      value: '6379'
+                    - name: PGUSER
+                      value: postgres
+                    - name: PGHOST
+                      value: postgres-cluster-ip-service # name of the ClusterIP service that is managing access to the pod
+                    - name: PGPORT
+                      value: '5432'
+                    - name: PGDATABASE
+                      value: postgres
+                      # Tell the multi-server container that gets created inside the pod what the postgres
+                      # custom secret password is
+                    - name: PGPASSWORD # the env variable for which the multi-server image looks for
+                      valueFrom:
+                        secretKeyRef:
+                            name: pgpassword # name of the secret object
+                            key: PGPASSWORD # key provided for the key/value pair attribute
