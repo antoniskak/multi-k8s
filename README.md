@@ -12,3 +12,10 @@ Example of building a simple multi-container fibonacci calculator app (https://g
   <li>https://github.com/kubernetes/ingress-nginx</li>
   <li>https://kubernetes.github.io/ingress-nginx/deploy/</li>
 </ul>
+
+#### Testing locally
+```
+kubectl apply -f k8s
+minikube ip
+```
+When we visit the ip address the browser will forward to the appropriate port (depending on wether or not an https connection is used) because the service is automatically listening on both ports 80 and 443.
