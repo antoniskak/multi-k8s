@@ -135,3 +135,36 @@ $ chmod 700 get_helm.s
     <li>Visit the external load balancer endpoint ip address to check that the app is working.</li>
   </ul>
 </ul>
+
+## HTTPS Setup with Kubernetes
+
+![cert-manager](https://user-images.githubusercontent.com/36962615/86849626-dd1da380-c0a7-11ea-8617-a5d1689f8c39.png)
+
+<ul>
+  <li>Purchase a domain</li>
+  <li>Update Custom resource records (Add A record for the Load Balacer IP and CNAME record for the domain name</li>
+  <li>On GCloud CLI install Cert Manager github.com/jetstack/cert-manager</li>
+</ul>
+
+```
+$ kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.11/deploy/manifests/00-crds.yaml
+$ kubectl create namespace cert-manager
+$ helm repo add jetstack https://charts.jetstack.io
+$ helm repo update
+$ helm install cert-manager --namespace cert-manager --version v0.11.0 jetstack/cert-manager
+```
+<ul>
+  <li>Create issuer object https://cert-manager.io/docs/configuration/acme/</li>
+  <li>Create certificate object</li>
+  <li>Push changes to the repo</li>
+  <li>In GCloud CLI:</li>
+</ul>
+
+```
+$ kubectl get certificates
+$ kubectl get secrets
+```
+
+<ul>
+  <li>Reconfigure nginx-ingress config file to serve HTTPS traffic (commit 56d9cfb shows the updates)</li>
+</ul>
