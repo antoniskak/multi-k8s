@@ -5,9 +5,28 @@ metadata:
     annotations:
         kubernetes.io/ingress.class: nginx # create an ingress controller based on nginx project
         nginx.ingress.kubernetes.io/rewrite-target: /$1 # if matching a route of '/api' rewrite to '/'
+        cert-manager.io/cluster-issuer: "letsencrypt-prod"
+        nginx.ingress.kubernetes.io/ssl-redirect: 'true' # make sure to always redirect to https connection
 spec:
+  tls:
+    - hosts:
+        - myk8s-multi.com
+        - www.myk8s-multi.com
+      secretName: myk8s-multi.com
     rules:
-        - http:
+        - host: myk8s-multi.com
+          http:
+            paths:
+                - path: /?(.*)
+                  backend:
+                    serviceName: client-cluster-ip-service
+                    servicePort: 3000
+                - path: /api/?(.*)
+                  backend:
+                    serviceName: server-cluster-ip-service
+                    servicePort: 5000
+        - host: www.myk8s-multi.com
+          http:
             paths:
                 - path: /?(.*)
                   backend:
